@@ -1,128 +1,177 @@
 import React from "react";
 
-const METRIC_COLORS = { F1: "orange", Recall: "purple", Precision: "teal" };
-
 function FiltersBar({
   data,
-  filter, onChangeFilter,
-  variantType, onChangeVariantType,
-  caller, onChangeCaller,
-  trustSet, onChangeTrustSet,
-  region, onChangeRegion,
-  metricSelections, onChangeMetricSelections,
-  plotType, onChangePlotType // <--- add here
+  filter,
+  onChangeFilter,
+  variantType,
+  onChangeVariantType,
+  benchmarking,
+  onChangeBenchmarking,
+  caller,
+  onChangeCaller,
+  trustSet,
+  onChangeTrustSet,
+  region,
+  onChangeRegion,
+  metricSelections,
+  onChangeMetricSelections,
+  plotType,
+  onChangePlotType,
 }) {
-  const uniqueValues = (field) =>
-    ["ALL", ...Array.from(new Set(data.map(d => (d[field] || "").trim()))).sort()];
+  const uniqueValues = (key) =>
+    [...new Set(data.map((row) => row[key]))].sort();
 
-  const callers = uniqueValues("Caller");
-  const truthSets = uniqueValues("Truthset");
-  const regions = uniqueValues("Regions");
-  const metrics = ["F1", "Recall", "Precision"];
+  const allMetrics = ["F1", "Recall", "Precision"];
 
-  const sectionClass = "flex flex-col mb-2";
-  const labelClass = "text-sm font-medium mb-1";
+  const toggleMetric = (metric) => {
+    if (metricSelections.includes(metric)) {
+      // remove metric
+      onChangeMetricSelections(metricSelections.filter((m) => m !== metric));
+    } else {
+      // add metric
+      onChangeMetricSelections([...metricSelections, metric]);
+    }
+  };
 
   return (
-    <div className="flex flex-wrap gap-6 p-4 bg-white border rounded shadow">
-      {/* Filter */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Filter</span>
-        <select
-          value={filter}
-          onChange={e => onChangeFilter(e.target.value)}
-          className="p-2 border rounded hover:border-gray-400"
-        >
-          <option value="ALL">ALL</option>
-          <option value="PASS">PASS</option>
-        </select>
-      </div>
+    <div className="bg-white rounded-2xl shadow-lg p-5 mb-6">
+      <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        Filters & Options
+      </h2>
 
-      {/* Variant Type */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Variant Type</span>
-        <select
-          value={variantType}
-          onChange={e => onChangeVariantType(e.target.value)}
-          className="p-2 border rounded hover:border-gray-400"
-        >
-          <option value="ALL">ALL</option>
-          <option value="SNP">SNP</option>
-          <option value="INDEL">INDEL</option>
-        </select>
-      </div>
-
-      {/* Caller */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Caller</span>
-        <select
-          value={caller}
-          onChange={e => onChangeCaller(e.target.value)}
-          className="p-2 border rounded hover:border-gray-400"
-        >
-          {callers.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
-
-      {/* Truthset */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Truthset</span>
-        <select
-          value={trustSet}
-          onChange={e => onChangeTrustSet(e.target.value)}
-          className="p-2 border rounded hover:border-gray-400"
-        >
-          {truthSets.map(ts => <option key={ts} value={ts}>{ts}</option>)}
-        </select>
-      </div>
-
-      {/* Regions */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Region</span>
-        <select
-          value={region}
-          onChange={e => onChangeRegion(e.target.value)}
-          className="p-2 border rounded hover:border-gray-400"
-        >
-          {regions.map(r => <option key={r} value={r}>{r}</option>)}
-        </select>
-      </div>
-
-      {/* Metrics */}
-      <div className={sectionClass}>
-        <span className={labelClass}>Metrics</span>
-        <div className="flex gap-3">
-          {metrics.map(m => (
-            <label key={m} className="flex items-center gap-1 text-sm cursor-pointer">
-              <input
-                type="checkbox"
-                checked={metricSelections.includes(m)}
-                onChange={e => {
-                  if (e.target.checked) onChangeMetricSelections([...metricSelections, m]);
-                  else onChangeMetricSelections(metricSelections.filter(x => x !== m));
-                }}
-                className="w-4 h-4"
-                style={{ accentColor: METRIC_COLORS[m] }}
-              />
-              <span className="ml-1">{m}</span>
-            </label>
-          ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        {/* Filter */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Filter</label>
+          <select
+            value={filter}
+            onChange={(e) => onChangeFilter(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            <option value="PASS">PASS</option>
+          </select>
         </div>
-      </div>
 
-          {/* Plot Type */}
-        <div className="flex flex-col mb-2">
-        <span className="text-sm font-medium mb-1">Plot Type</span>
-        <select
+        {/* Variant Type */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Variant Type</label>
+          <select
+            value={variantType}
+            onChange={(e) => onChangeVariantType(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            {uniqueValues("Type").map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Benchmarking */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Benchmarking</label>
+          <select
+            value={benchmarking}
+            onChange={(e) => onChangeBenchmarking(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            {uniqueValues("Benchmarking").map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Caller */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Caller</label>
+          <select
+            value={caller}
+            onChange={(e) => onChangeCaller(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            {uniqueValues("Caller").map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Truthset */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Truthset</label>
+          <select
+            value={trustSet}
+            onChange={(e) => onChangeTrustSet(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            {uniqueValues("Truthset").map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Regions */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Regions</label>
+          <select
+            value={region}
+            onChange={(e) => onChangeRegion(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="ALL">ALL</option>
+            {uniqueValues("Regions").map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Metrics - toggle buttons */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2">Metrics</label>
+          <div className="flex gap-2 flex-wrap">
+            {allMetrics.map((m) => (
+              <button
+                key={m}
+                onClick={() => toggleMetric(m)}
+                className={`px-3 py-1 rounded-lg border focus:outline-none focus:ring-2 ${
+                  metricSelections.includes(m)
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Plot Type */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Plot Type</label>
+          <select
             value={plotType}
             onChange={(e) => onChangePlotType(e.target.value)}
-            className="p-2 border rounded hover:border-gray-400"
-        >
-            <option value="bar">Bar Plot</option>
-            <option value="dot">Dot Plot</option>
-        </select>
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="bar">Bar</option>
+            <option value="dot">Dot</option>
+          </select>
         </div>
-
+      </div>
     </div>
   );
 }

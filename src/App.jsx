@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import BenchmarkChart from "./components/BenchmarkChart";
 import MetricsTable from "./components/MetricsTable";
-import Sidebar from "./components/Sidebar";
 import PublicationFigure from "./components/PublicationFigure";
 import FiltersBar from "./components/FiltersBar";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   const [data, setData] = useState(null);
@@ -11,7 +11,8 @@ function App() {
 
   // Filters
   const [filter, setFilter] = useState("ALL");
-  const [variantType, setVariantType] = useState("ALL");
+  const [variantType, setVariantType] = useState("SNP");
+  const [benchmarking, setBenchmarking] = useState("ALL");
   const [caller, setCaller] = useState("ALL");
   const [trustSet, setTrustSet] = useState("ALL");
   const [region, setRegion] = useState("ALL");
@@ -25,17 +26,25 @@ function App() {
       .catch((err) => console.error("Error loading benchmark data:", err));
   }, []);
 
-  if (!data) return <p className="p-4 text-gray-600">Loading benchmark data...</p>;
+  if (!data) {
+    return <p className="p-4 text-gray-600">Loading benchmark data...</p>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 p-4">
       {/* Header */}
       <header className="mb-4">
         <h1 className="text-2xl font-bold">Germline SNV Benchmark Platform</h1>
-        <p className="text-gray-700 mb-2">Compare precision, recall, and F1 across pipelines.</p>
+        <p className="text-gray-700 mb-2">
+          Compare precision, recall, and F1 across pipelines.
+        </p>
         <div className="mt-2 p-2 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded">
-          To add your own benchmarking results, please send your hap.py, rtgtools, summary files to{" "}
-          <a href="mailto:frederik.otzen.bagger@regionh.dk" className="underline text-blue-600">
+          To add your own benchmarking results, please send your hap.py, rtgtools, summary 
+          files to{" "}
+          <a
+            href="mailto:frederik.otzen.bagger@regionh.dk"
+            className="underline text-blue-600"
+          >
             frederik.otzen.bagger@regionh.dk
           </a>
         </div>
@@ -48,6 +57,8 @@ function App() {
         onChangeFilter={setFilter}
         variantType={variantType}
         onChangeVariantType={setVariantType}
+        benchmarking={benchmarking}
+        onChangeBenchmarking={setBenchmarking}
         caller={caller}
         onChangeCaller={setCaller}
         trustSet={trustSet}
@@ -56,6 +67,8 @@ function App() {
         onChangeRegion={setRegion}
         metricSelections={metricSelections}
         onChangeMetricSelections={setMetricSelections}
+        plotType={plotType}
+        onChangePlotType={setPlotType}
       />
 
       {/* Benchmarking Results */}
@@ -65,12 +78,12 @@ function App() {
           data={data}
           filter={filter}
           variantType={variantType}
+          benchmarking={benchmarking}
           caller={caller}
           trustSet={trustSet}
           region={region}
           metricSelections={metricSelections}
-          plotType={plotType} // NEW
-          onChangePlotType={setPlotType}
+          plotType={plotType}
         />
       </div>
 
@@ -80,6 +93,7 @@ function App() {
           data={data}
           filter={filter}
           variantType={variantType}
+          benchmarking={benchmarking}
           caller={caller}
           trustSet={trustSet}
           region={region}
