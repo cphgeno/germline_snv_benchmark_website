@@ -11,18 +11,16 @@ import {
   Legend,
 } from "chart.js";
 
-// Register necessary Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  PointElement, // needed for scatter/dot plots
+  PointElement,
   Title,
   Tooltip,
   Legend
 );
 
-// Metric colors
 const METRIC_COLORS = {
   F1: "rgba(255,159,64,0.6)",
   Recall: "rgba(153,102,255,0.6)",
@@ -33,23 +31,32 @@ function PublicationFigure({
   data,
   filter,
   variantType,
-  caller,
-  trustSet,
-  region,
+  caller = ["ALL"],
+  trustSet = ["ALL"],
+  region = ["ALL"],
+  pipeline = ["ALL"],
   metricSelections = ["F1"],
-  plotType = "bar", // "bar" or "dot"
+  plotType = "bar",
+  sample = ["ALL"]
 }) {
   if (!data) return null;
 
-  // Filter data based on all user selections
-  const filtered = data.filter(
-    (row) =>
-      (filter === "ALL" || row.Filter === filter) &&
-      (variantType === "ALL" || row.Type === variantType) &&
-      (caller === "ALL" || row.Caller === caller) &&
-      (trustSet === "ALL" || row.Truthset === trustSet) &&
-      (region === "ALL" || row.Regions === region)
-  );
+  // Ensure arrays
+  caller = Array.isArray(caller) ? caller : [caller];
+  trustSet = Array.isArray(trustSet) ? trustSet : [trustSet];
+  region = Array.isArray(region) ? region : [region];
+  pipeline = Array.isArray(pipeline) ? pipeline : [pipeline];
+  sample = Array.isArray(sample) ? sample : [sample];
+
+const filtered = data.filter((row) =>
+  (filter === "ALL" || row.Filter === filter) &&
+  (variantType === "ALL" || row.Type === variantType) &&
+  (caller.includes("ALL") || caller.includes(row.Caller)) &&
+  (trustSet.includes("ALL") || trustSet.includes(row.Truthset)) &&
+  (region.includes("ALL") || region.includes(row.Regions)) &&
+  (pipeline.includes("ALL") || pipeline.includes(row.Pipeline)) &&
+  (sample.includes("ALL") || sample.includes(row.Sample))  // <-- new
+);
 
   // Group by Caller
   const grouped = {};
@@ -63,7 +70,6 @@ function PublicationFigure({
       {Object.entries(grouped).map(([callerName, rows]) => {
         const labels = rows.map((r) => r.Pipeline);
 
-        // Build datasets for each selected metric
         const datasets = metricSelections.map((metric) => {
           if (plotType === "bar") {
             return {
@@ -71,7 +77,7 @@ function PublicationFigure({
               data: rows.map((r) => r[metric]),
               backgroundColor: METRIC_COLORS[metric],
             };
-          } else if (plotType === "dot") {
+          } else {
             return {
               label: metric,
               data: rows.map((r, idx) => ({ x: idx, y: r[metric] })),
@@ -80,22 +86,15 @@ function PublicationFigure({
               pointRadius: 6,
             };
           }
-          return null;
         });
 
         return (
-          <div
-            key={callerName}
-            className="bg-white border rounded shadow p-4"
-          >
+          <div key={callerName} className="bg-white border rounded shadow p-4">
             <h3 className="font-semibold mb-2">{callerName}</h3>
 
             {plotType === "bar" ? (
               <Bar
-                data={{
-                  labels,
-                  datasets,
-                }}
+                data={{ labels, datasets }}
                 options={{
                   responsive: true,
                   plugins: { legend: { position: "top" } },
@@ -104,9 +103,7 @@ function PublicationFigure({
               />
             ) : (
               <Scatter
-                data={{
-                  datasets,
-                }}
+                data={{ datasets }}
                 options={{
                   responsive: true,
                   plugins: { legend: { position: "top" } },

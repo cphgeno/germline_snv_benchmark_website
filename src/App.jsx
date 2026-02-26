@@ -17,7 +17,10 @@ function App() {
   const [trustSet, setTrustSet] = useState("ALL");
   const [region, setRegion] = useState("ALL");
   const [metricSelections, setMetricSelections] = useState(["F1"]);
-  const [plotType, setPlotType] = useState("bar"); // "bar" or "dot"
+  const [plotType, setPlotType] = useState("bar"); 
+  const [pipeline, setPipeline] = useState(["ALL"]);
+  const [sample, setSample] = useState(["ALL"]);  // new
+
 
   useEffect(() => {
     fetch("/summary.json")
@@ -69,6 +72,12 @@ function App() {
         onChangeMetricSelections={setMetricSelections}
         plotType={plotType}
         onChangePlotType={setPlotType}
+        pipeline={pipeline}
+        onChangePipeline={setPipeline}
+        sample={sample}
+        onChangeSample={setSample}
+        
+        
       />
 
       {/* Benchmarking Results */}
@@ -84,6 +93,8 @@ function App() {
           region={region}
           metricSelections={metricSelections}
           plotType={plotType}
+          pipeline={pipeline}
+          sample={sample}
         />
       </div>
 
