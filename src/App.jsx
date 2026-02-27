@@ -20,6 +20,7 @@ function App() {
   const [plotType, setPlotType] = useState("bar"); 
   const [pipeline, setPipeline] = useState(["ALL"]);
   const [sample, setSample] = useState(["ALL"]);  // new
+  const [facetBy, setFacetBy] = useState("NONE");
 
 
   useEffect(() => {
@@ -76,6 +77,8 @@ function App() {
         onChangePipeline={setPipeline}
         sample={sample}
         onChangeSample={setSample}
+        facetBy={facetBy}
+        onChangeFacetBy={setFacetBy}
         
         
       />
@@ -95,6 +98,7 @@ function App() {
           plotType={plotType}
           pipeline={pipeline}
           sample={sample}
+          facetBy={facetBy}
         />
       </div>
 

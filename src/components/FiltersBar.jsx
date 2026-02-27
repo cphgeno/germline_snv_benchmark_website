@@ -22,6 +22,8 @@ function FiltersBar({
   onChangePipeline,
   sample,
   onChangeSample,
+  facetBy,
+  onChangeFacetBy,
 }) {
   const uniqueValues = (key) => [...new Set(data.map((row) => row[key]))].sort();
 
@@ -138,6 +140,21 @@ function FiltersBar({
           >
             <option value="bar">Bar</option>
             <option value="dot">Dot</option>
+          </select>
+        </div>
+        {/* Facet By */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Facet By</label>
+          <select
+            value={facetBy}
+            onChange={(e) => onChangeFacetBy(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="NONE">None</option>
+            <option value="Caller">Caller</option>
+            <option value="Regions">Region</option>
+            <option value="Sample">Sample</option>
+            <option value="Pipeline">Pipeline</option>
           </select>
         </div>
 

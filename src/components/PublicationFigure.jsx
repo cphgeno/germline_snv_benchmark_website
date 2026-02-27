@@ -37,7 +37,8 @@ function PublicationFigure({
   pipeline = ["ALL"],
   metricSelections = ["F1"],
   plotType = "bar",
-  sample = ["ALL"]
+  sample = ["ALL"],
+  facetBy = "NONE"
 }) {
   if (!data) return null;
 
@@ -58,12 +59,17 @@ const filtered = data.filter((row) =>
   (sample.includes("ALL") || sample.includes(row.Sample))  // <-- new
 );
 
-  // Group by Caller
-  const grouped = {};
+ let grouped = {};
+
+if (facetBy === "NONE") {
+  grouped["All Results"] = filtered;
+} else {
   filtered.forEach((row) => {
-    if (!grouped[row.Caller]) grouped[row.Caller] = [];
-    grouped[row.Caller].push(row);
+    const key = row[facetBy];
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(row);
   });
+}
 
   return (
     <div className="grid grid-cols-1 gap-6">
