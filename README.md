@@ -61,7 +61,7 @@ Input data should be a JSON array of objects like:
 
 ```bash
 # Clone the repository
-git clone https://github.com/<username>/germline-snv-benchmark.git
+git clone https://github.com/cphgeno/germline_snv_benchmark_website
 cd germline-snv-benchmark
 
 # Install dependencies
