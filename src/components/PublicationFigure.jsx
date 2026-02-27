@@ -66,9 +66,14 @@ const filtered = data.filter((row) =>
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6">
       {Object.entries(grouped).map(([callerName, rows]) => {
-        const labels = rows.map((r) => r.Pipeline);
+        const labels = rows.map((r) => [
+  r.Pipeline,
+  r.Caller,
+  r.Regions,
+  r.Sample
+]);
 
         const datasets = metricSelections.map((metric) => {
           if (plotType === "bar") {

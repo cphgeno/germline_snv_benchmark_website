@@ -98,7 +98,7 @@ function App() {
         />
       </div>
 
-      {/* Layout */}
+      {/* Layout 
       <div className="flex gap-6 flex-1 overflow-hidden">
         <Sidebar
           data={data}
@@ -122,6 +122,7 @@ function App() {
           )}
         </div>
       </div>
+      */}
     </div>
   );
 }
