@@ -86,7 +86,7 @@ function TelemetryPanel({ telemetryData, telemetrySelections }) {
   return (
     <div className="bg-white border rounded shadow p-4">
       <div className="flex items-start justify-between flex-wrap gap-2 mb-1">
-        <h3 className="font-semibold">Compute & Cost by pipeline execution</h3>
+        <h3 className="font-semibold">Compute by pipeline execution</h3>
         <div className="flex items-center gap-2 text-sm">
           <span className="text-gray-500">Scale:</span>
           <button

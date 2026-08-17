@@ -87,7 +87,7 @@ function FiltersBar({
 
       {telemetryActive && (
         <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">
-          Compute & Cost shows cumulative totals per pipeline execution, so the filters below don't apply while it's active, they're locked to ALL. Turn off all Compute & Cost metrics to filter results again.
+          Compute shows cumulative totals per pipeline execution, so the filters below don't apply while it's active, they're locked to ALL. Turn off all Compute metrics to filter results again.
         </p>
       )}
 
@@ -235,7 +235,7 @@ function FiltersBar({
 
       {/* Telemetry -- always enabled, independent of the filters above */}
       <div className="flex flex-col mt-4 pt-4 border-t">
-        <label className="text-sm font-medium mb-2">Compute & Cost</label>
+        <label className="text-sm font-medium mb-2">Compute</label>
         <div className="flex gap-2 flex-wrap">
           {allTelemetry.map((m) => (
             <button
