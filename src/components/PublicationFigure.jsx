@@ -38,7 +38,7 @@ function PublicationFigure({
   metricSelections = ["F1"],
   plotType = "bar",
   sample = ["ALL"],
-  facetBy = "NONE"
+  facetBy = "NONE",
 }) {
   if (!data) return null;
 

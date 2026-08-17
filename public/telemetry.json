@@ -1,0 +1,138 @@
+[
+  {
+    "Execution": "MDx1-NGC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 6.0669,
+    "CPU_hours": 627.7147,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "MDx1-NGC-S",
+    "Nodes": "Single",
+    "Wall_time_hours": 5.8022,
+    "CPU_hours": 619.7172,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "MDx2-NGC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 4.4106,
+    "CPU_hours": 366.1114,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "MDx2-NGC-S",
+    "Nodes": "Single",
+    "Wall_time_hours": 3.9817,
+    "CPU_hours": 362.5567,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "PB1-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 0.4278,
+    "CPU_hours": 163.365,
+    "GPU_hours": 12.12,
+    "Note": "Wall-time is longest single-sample time; CPU-time is allocated cpu-hours per footnote (table cell says NA -- main compute was on GPU, CPUs barely used)"
+  },
+  {
+    "Execution": "PB2-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 0.3886,
+    "CPU_hours": 169.68,
+    "GPU_hours": 11.67,
+    "Note": "Wall-time is longest single-sample time; CPU-time is allocated cpu-hours per footnote (table cell says NA -- main compute was on GPU, CPUs barely used)"
+  },
+  {
+    "Execution": "NFCS1-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 6.5025,
+    "CPU_hours": 2278.3,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS2-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 7.1414,
+    "CPU_hours": 2362.7,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS3-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 7.4233,
+    "CPU_hours": 2847.1,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS4-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 6.6261,
+    "CPU_hours": 2263.8,
+    "GPU_hours": 0,
+    "Note": "Configuration similar to NFCS2 but with performance-optimisation changes"
+  },
+  {
+    "Execution": "NFCS5-GeG-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 4.5869,
+    "CPU_hours": 2179.4,
+    "GPU_hours": 14.82,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS6-GeC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 5.3122,
+    "CPU_hours": 1348,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS7-GeC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 6.1169,
+    "CPU_hours": 1451.1,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS8-NGC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 4.8867,
+    "CPU_hours": 1936.1,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "NFCS9-NGC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 3.5961,
+    "CPU_hours": 1521.9,
+    "GPU_hours": 0,
+    "Note": null
+  },
+  {
+    "Execution": "SC-NGC-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 0.2744,
+    "CPU_hours": 368.8533,
+    "GPU_hours": 0,
+    "Note": "Wall-time is longest single-sample time"
+  },
+  {
+    "Execution": "DR-DOP-M",
+    "Nodes": "Multi",
+    "Wall_time_hours": 1.1,
+    "CPU_hours": null,
+    "GPU_hours": 0,
+    "Note": "Wall-time is longest single-sample time; CPU-time NA (FPGA chip and CPU)"
+  }
+]

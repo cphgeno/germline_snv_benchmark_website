@@ -53,9 +53,62 @@ Input data should be a JSON array of objects like:
   "QUERY_TiTv_ratio": 2.0020,
   "TRUTH_het_hom_ratio": 1.9159,
   "QUERY_het_hom_ratio": 1.5370,
-  "Threshold": "NA"
+  "Threshold": "NA",
+  "CPU_hours": null,
+  "GPU_hours": null,
+  "Wall_time_hours": null
 }
 ```
+
+`summary.json` carries three telemetry fields (`CPU_hours`, `GPU_hours`,
+`Wall_time_hours`) but they are intentionally left `null`
+-- see "Compute & Cost" below for why this data lives elsewhere instead.
+
+## Compute & Cost (pipeline telemetry)
+
+Computational telemetry -- CPU/GPU hours, wall time --
+is reported **per pipeline execution across all samples**, not per
+sample/caller/File. That's a different granularity than every other field
+in `summary.json` (which is one row per SNP/INDEL x ALL/PASS x Region x
+Caller x Sample), so rather than force-fitting it onto `summary.json` rows
+(which would either duplicate the same number across dozens of rows or
+require averaging/splitting numbers that were never measured per-sample),
+it lives in its own file: `public/telemetry.json`.
+
+`public/telemetry.json` is a flat array, one entry per pipeline execution:
+
+```json
+{
+  "Execution": "NFCS9-NGC-M",
+  "Nodes": "Multi",
+  "Wall_time_hours": 3.5961,
+  "CPU_hours": 1521.9,
+  "GPU_hours": 0.0,
+  "Note": null
+}
+```
+
+It's generated from `telemetry_table4.csv` (the source-of-truth table, one
+row per pipeline execution, durations as `XhYYmZZs` strings) via:
+
+```bash
+python3 table4_to_telemetry_json.py -i telemetry_table4.csv -o public/telemetry.json
+```
+
+`-` in the source table means a known zero (e.g. no GPU
+used); `NA` means not measured/not applicable and becomes `null`, unless
+a footnote in the paper gives an explicit substitute value (as for the
+PB1/PB2 CPU allocation). There is no cost estimate -- run cost data isn't
+available, so it was dropped from the schema entirely rather than kept
+as an always-null placeholder.
+
+In the app, the **Compute & Cost** toggles in the Filters bar are always
+active, independent of every other filter. Turning one on switches the
+main panel to a chart of `telemetry.json`, and locks the other
+filters (Caller, Pipeline, Sample, Truthset, Region, Type, Filter, Metrics,
+Plot Type, Facet By) to `ALL`, since those don't apply to per-execution
+totals. Turning all Compute & Cost toggles back off restores normal
+filtering of `summary.json`.
 
 ## Installation
 
@@ -119,17 +172,21 @@ This project uses the following libraries and frameworks:
 
 ```text
 ├── public/
-│   └── summary.json          # Benchmark data in JSON format
+│   ├── summary.json           # Benchmark data in JSON format
+│   └── telemetry.json         # Per-pipeline-execution compute telemetry
 ├── src/
 │   ├── components/
 │   │   ├── BenchmarkChart.jsx      # Chart for a selected pipeline
 │   │   ├── MetricsTable.jsx        # Table showing metrics for a selected pipeline
 │   │   ├── PublicationFigure.jsx   # Chart of multiple pipelines / callers
-│   │   ├── FiltersBar.jsx          # Top-right filter bar component
+│   │   ├── TelemetryPanel.jsx      # Compute & Cost chart + table (reads telemetry.json)
+│   │   ├── FiltersBar.jsx          # Top filter bar + Compute & Cost toggles
 │   │   └── Sidebar.jsx             # Pipeline selection sidebar
 │   ├── App.jsx                     # Main application component
 │   └── main.jsx                    # React entry point
-├── csv_to_json.py                   # CSV → JSON converter script
+├── csv_to_json.py                   # CSV → JSON converter script (summary.json)
+├── telemetry_table4.csv             # Source-of-truth pipeline telemetry table
+├── table4_to_telemetry_json.py      # Converts telemetry_table4.csv → telemetry.json
 ├── package.json                     # Project dependencies and scripts
 ├── vite.config.js                   # Vite configuration
 └── tailwind.config.js               # Tailwind CSS configuration
